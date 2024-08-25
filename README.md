@@ -21,6 +21,12 @@ If the token is not in the enviornment yet, set it up by the following commands 
 $ export DUCKDNS_TOKEN='example-token'
 ```
 
+A few other settings are available via environment variables:
+
+- use `DUCKDNS_VERBOSE=true` to print more details from the DuckDNS API. Defaults to "false".
+- use `DUCKDNS_DELAY` change how long the script waits for DNS propagation. Defaults to "30".
+
+
 ## Usage
 
 ```
