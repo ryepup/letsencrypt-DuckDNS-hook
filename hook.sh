@@ -12,19 +12,22 @@ if [[ -z "${DUCKDNS_TOKEN}" ]]; then
   echo " - Unable to locate DuckDNS Token in the environment!  Make sure DUCKDNS_TOKEN environment variable is set"
 fi
 
+VERBOSE="${DUCKDNS_VERBOSE:-false}"
+DELAY="${DUCKDNS_DELAY_SECONDS:-30}"
+
 deploy_challenge() {
   local DOMAIN="${1}" TOKEN_FILENAME="${2}" TOKEN_VALUE="${3}"
   echo -n " - Setting TXT record with DuckDNS ${TOKEN_VALUE}"
-  curl "https://www.duckdns.org/update?domains=${DOMAIN}&token=${DUCKDNS_TOKEN}&txt=${TOKEN_VALUE}"
+  curl -s "https://www.duckdns.org/update?domains=${DOMAIN}&token=${DUCKDNS_TOKEN}&txt=${TOKEN_VALUE}&verbose=${VERBOSE}"
   echo
-  echo " - Waiting 30 seconds for DNS to propagate."
-  sleep 30
+  echo " - Waiting $DELAY seconds for DNS to propagate."
+  sleep "$DELAY"
 }
 
 clean_challenge() {
   local DOMAIN="${1}" TOKEN_FILENAME="${2}" TOKEN_VALUE="${3}"
   echo -n " - Removing TXT record from DuckDNS ${DOMAIN}"
-  curl "https://www.duckdns.org/update?domains=${DOMAIN}&token=${DUCKDNS_TOKEN}&txt=removed&clear=true"
+  curl -s "https://www.duckdns.org/update?domains=${DOMAIN}&token=${DUCKDNS_TOKEN}&txt=removed&clear=true&verbose=${VERBOSE}"
   echo
 }
 
